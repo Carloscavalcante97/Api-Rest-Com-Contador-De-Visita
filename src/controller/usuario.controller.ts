@@ -3,10 +3,7 @@ import Link from "../models/link.models";
 import { cadastrarNoBanco, contarVisitas, lerBanco } from "../service/usuario.service";
 
 const BD_PATH = "src/bancoDeDados.json";
-interface User {
-  identificador: string;
-  url: string;
-}
+
 class UsuarioController {
   
   async get(req: Request, res: Response) {
@@ -15,13 +12,15 @@ class UsuarioController {
   }
 
   async getUserbyId(req: Request, res: Response) {
-    const identificador = req.params.identificador;
+    const {identificador} = req.params;
     const dados = await lerBanco(BD_PATH);
     const findUser = dados.find(
-      (user: User) => user.identificador === identificador
+      (user) => user.identificador === identificador
     );
     if(!findUser){
-    return res.status(404).json({ message: "Usuario não encontrado" })};
+    return res.status(404).json({ message: "Usuario não encontrado" }
+    )};
+
     await contarVisitas(findUser.identificador);
     return res.status(200).json(findUser);
   }
@@ -38,7 +37,7 @@ class UsuarioController {
   async editar(req: Request, res: Response) {
     const { identificador, url } = req.body;
     const dados = await lerBanco(BD_PATH);
-    const findUser = dados.find((user: User) => user.url === url);
+    const findUser = dados.find((user) => user.url === url);
     if (!findUser) {
       return res.status(404).json({ message: "Usuario não encontrado" });
     }
@@ -51,7 +50,7 @@ class UsuarioController {
     const { identificador } = req.params;
     const dados = await lerBanco(BD_PATH);
     const userIndex = dados.findIndex(
-      (user: User) => user.identificador === identificador
+      (user) => user.identificador === identificador
     );
     if (userIndex === -1) { 
       return res.status(404).json({ message: "Usuario não encontrado" });
