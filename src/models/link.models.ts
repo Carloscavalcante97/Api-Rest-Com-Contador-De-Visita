@@ -1,4 +1,9 @@
-class Link {
+interface ILink {
+    identificador: string;
+    url: string;
+    visitas: number;
+}
+class Link implements ILink {
     identificador: string;
     url: string;
     visitas: number;
